@@ -1,15 +1,33 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from "@angular/router";
+
+import { ProductosService } from '../../services/productos.service';
 
 @Component({
   selector: 'app-portafolio-item',
   templateUrl: './portafolio-item.component.html',
   styles: []
 })
-export class PortafolioItemComponent implements OnInit {
+export class PortafolioItemComponent  {
 
-  constructor() { }
+  producto:any = undefined;
+  codigo:string = "";
 
-  ngOnInit() {
-  }
+  constructor( private route:ActivatedRoute,
+               private _ps:ProductosService ) { 
 
+      route.params.subscribe( parametros => {
+
+          //console.log(parametros);
+          //console.log(parametros['id']);
+
+          _ps.datosProducto( parametros['id'] ) 
+              .subscribe( res => {
+
+                  this.codigo = parametros['id'];
+                  this.producto = res.json();
+                  //console.log(this.producto);
+             })
+      })
+   }
 }
